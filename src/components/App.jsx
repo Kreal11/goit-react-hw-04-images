@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Searchbar } from './Searchbar/Searchbar';
@@ -6,35 +5,43 @@ import { toast } from 'react-toastify';
 import { fetchImages } from 'services/image-api';
 import { InfinitySpin } from 'react-loader-spinner';
 import { Modal } from './Modal/Modal';
+import { useEffect, useState } from 'react';
 
-class App extends Component {
-  state = {
-    isOpen: false,
-    loading: false,
-    first_load: false,
-    dataModal: null,
-    error: null,
-    total: null,
-    images: [],
-    per_page: 12,
-    page: 1,
-    q: '',
-  };
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setIsLoading] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(false);
+  const [dataModal, setDataModal] = useState(null);
+  const [error, setError] = useState(null);
+  const [total, setTotal] = useState(null);
+  const [images, setImages] = useState([]);
+  const [perPage, setPerPage] = useState(12);
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
 
-  async componentDidMount() {
-    this.state.first_load = true;
-    const { per_page, page } = this.state;
-    this.getImages({ per_page, page });
-  }
+  // async componentDidMount() {
+  //   this.state.first_load = true;
+  //   const { per_page, page } = this.state;
+  //   this.getImages({ per_page, page });
+  // }
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { per_page, page, q } = this.state;
-    if (q !== prevState.q || page !== prevState.page) {
-      this.getImages({ per_page, page, q });
-    }
-  }
+  useEffect(() => {
+    setFirstLoad(true);
+    getImages(perPage, page);
+  }, [perPage, page]);
 
-  getImages = async params => {
+  // async componentDidUpdate(prevProps, prevState) {
+  //   const { per_page, page, q } = this.state;
+  //   if (q !== prevState.q || page !== prevState.page) {
+  //     this.getImages({ per_page, page, q });
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if()
+  // },[])
+
+  const getImages = async params => {
     const { first_load, q, page } = this.state;
     this.setState({ loading: true });
     try {
@@ -67,45 +74,37 @@ class App extends Component {
     this.setState(prev => ({ isOpen: !prev.isOpen, dataModal: largeImageURL }));
   };
 
-  render() {
-    const { images, total, loading, isOpen, dataModal, q } = this.state;
+  return (
+    <div
+      style={{
+        padding: 40,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        fontSize: 40,
+        color: '#010101',
+      }}
+    >
+      <Searchbar setSearch={handleSetSearch} loading={loading} query={q} />
 
-    return (
-      <div
-        style={{
-          padding: 40,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
-        <Searchbar
-          setSearch={this.handleSetSearch}
-          loading={loading}
-          query={q}
-        />
+      <ImageGallery images={images} toggleModal={handleToggleModal} />
 
-        <ImageGallery images={images} toggleModal={this.handleToggleModal} />
+      {total > images.length && !loading && (
+        <Button onClick={handleOnLoadMore} disabled={loading}>
+          {loading ? 'Loading...' : 'Load more'}
+        </Button>
+      )}
 
-        {total > images.length && !loading && (
-          <Button onClick={this.handleOnLoadMore} disabled={loading}>
-            {loading ? 'Loading...' : 'Load more'}
-          </Button>
-        )}
+      {loading && <InfinitySpin width="200" color="#4fa94d" />}
 
-        {loading && <InfinitySpin width="200" color="#4fa94d" />}
-
-        {isOpen && dataModal ? (
-          <Modal close={this.handleToggleModal}>
-            <img src={dataModal} alt="Large size img" />
-          </Modal>
-        ) : null}
-      </div>
-    );
-  }
-}
+      {isOpen && dataModal ? (
+        <Modal close={handleToggleModal}>
+          <img src={dataModal} alt="Large size img" />
+        </Modal>
+      ) : null}
+    </div>
+  );
+};
 
 export default App;
