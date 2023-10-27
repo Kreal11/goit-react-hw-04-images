@@ -27,8 +27,8 @@ const App = () => {
 
   useEffect(() => {
     setFirstLoad(true);
-    getImages(perPage, page);
-  }, [perPage, page]);
+    getImages({ perPage, page, query });
+  }, [perPage, page, query]);
 
   // async componentDidUpdate(prevProps, prevState) {
   //   const { per_page, page, q } = this.state;
@@ -38,8 +38,10 @@ const App = () => {
   // }
 
   // useEffect(() => {
-  //   if()
-  // },[])
+  //   if (!query === false || !page = false) {
+  //     setImages(query, page, perPage);
+  //   }
+  // }, [query, page, perPage]);
 
   const getImages = async params => {
     const { first_load, q, page } = this.state;
