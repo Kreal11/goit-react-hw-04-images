@@ -45,7 +45,7 @@ const App = () => {
     };
 
     if (query) {
-      getImages({ perPage, page, q: query });
+      getImages({ per_page: perPage, page, q: query });
     } else {
       getImages({ per_page: perPage, page });
     }
