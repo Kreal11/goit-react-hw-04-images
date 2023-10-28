@@ -25,9 +25,30 @@ const App = () => {
   //   this.getImages({ per_page, page });
   // }
 
+  const getImages = async params => {
+    try {
+      setIsLoading(true);
+      const { hits, totalHits } = await fetchImages(params);
+      setImages(prev => [...prev, ...hits]);
+      setTotal(totalHits);
+      if (firstLoad || (query && page === 1)) {
+        toast.success(`We found ${totalHits} images`);
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setFirstLoad(false);
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     setFirstLoad(true);
-    getImages({ perPage, page, query });
+    if (query) {
+      getImages({ perPage, page, query });
+    } else {
+      getImages({ perPage, page });
+    }
   }, [perPage, page, query]);
 
   // async componentDidUpdate(prevProps, prevState) {
@@ -43,37 +64,24 @@ const App = () => {
   //   }
   // }, [query, page, perPage]);
 
-  const getImages = async params => {
-    const { first_load, q, page } = this.state;
-    this.setState({ loading: true });
-    try {
-      const { hits, totalHits } = await fetchImages(params);
-      this.setState(prevState => ({
-        images: [...prevState.images, ...hits],
-        total: totalHits,
-      }));
-      if (first_load || (q && page === 1)) {
-        toast.success(`We found ${totalHits} images`);
-      }
-      this.state.first_load = false;
-    } catch (error) {
-      toast.error('Oops, something went wrong');
-    } finally {
-      this.setState({ loading: false });
-    }
+  const handleOnLoadMore = () => {
+    // this.setState({ loading: true });
+    // this.setState(prev => ({ page: prev.page + 1 }));
+    setIsLoading(true);
+    setPage(prev => prev + 1);
   };
 
-  handleOnLoadMore = () => {
-    this.setState({ loading: true });
-    this.setState(prev => ({ page: prev.page + 1 }));
+  const handleSetSearch = query => {
+    // this.setState({ q, images: [], page: 1 });
+    setQuery(query);
+    setImages([]);
+    setPage(1);
   };
 
-  handleSetSearch = q => {
-    this.setState({ q, images: [], page: 1 });
-  };
-
-  handleToggleModal = largeImageURL => {
-    this.setState(prev => ({ isOpen: !prev.isOpen, dataModal: largeImageURL }));
+  const handleToggleModal = largeImageURL => {
+    // this.setState(prev => ({ isOpen: !prev.isOpen, dataModal: largeImageURL }));
+    setIsOpen(prev => !prev);
+    setDataModal(largeImageURL);
   };
 
   return (
@@ -88,7 +96,7 @@ const App = () => {
         color: '#010101',
       }}
     >
-      <Searchbar setSearch={handleSetSearch} loading={loading} query={q} />
+      <Searchbar setSearch={handleSetSearch} loading={loading} query={query} />
 
       <ImageGallery images={images} toggleModal={handleToggleModal} />
 

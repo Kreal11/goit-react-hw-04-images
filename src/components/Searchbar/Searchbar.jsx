@@ -1,51 +1,54 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-export class Searchbar extends Component {
-  state = {
-    searchStr: '',
-  };
+export const Searchbar = ({ loading, query, setSearch }) => {
+  // state = {
+  //   searchStr: '',
+  // };
+  const [searchStr, setSeacrStr] = useState('');
 
-  handleOnSubmit = e => {
+  const handleOnSubmit = e => {
     e.preventDefault();
-    if (!this.state.searchStr) {
+    if (!searchStr) {
       return;
     }
-    this.props.setSearch(this.state.searchStr);
-    this.setState({ searchStr: '' });
+    setSearch(searchStr);
+    setSeacrStr('');
+    // if (!this.state.searchStr) {
+    //   return;
+    // }
+    // this.props.setSearch(this.state.searchStr);
+    // this.setState({ searchStr: '' });
   };
 
-  handleOnChangeInput = e => {
-    this.setState({ searchStr: e.target.value });
+  const handleOnChangeInput = e => {
+    setSeacrStr(e.target.value);
   };
 
-  render() {
-    const { loading, query } = this.props;
-    return (
-      <header>
-        <form onSubmit={this.handleOnSubmit}>
-          <button
-            type="submit"
-            disabled={
-              loading ||
-              this.state.searchStr.trim() === '' ||
-              query.trim() === this.state.searchStr.trim()
-            }
-          >
-            <span>Search</span>
-          </button>
+  return (
+    <header>
+      <form onSubmit={handleOnSubmit}>
+        <button
+          type="submit"
+          disabled={
+            loading ||
+            searchStr.trim() === '' ||
+            query.trim() === searchStr.trim()
+          }
+        >
+          <span>Search</span>
+        </button>
 
-          <input
-            onChange={this.handleOnChangeInput}
-            type="search"
-            placeholder="Search images and photos"
-            disabled={loading}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          onChange={handleOnChangeInput}
+          type="search"
+          placeholder="Search images and photos"
+          disabled={loading}
+        />
+      </form>
+    </header>
+  );
+};
 
 Searchbar.propTypes = {
   setSearch: PropTypes.func.isRequired,
