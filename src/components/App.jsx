@@ -24,32 +24,61 @@ const App = () => {
   //   const { per_page, page } = this.state;
   //   this.getImages({ per_page, page });
   // }
+
   useEffect(() => {
-    setFirstLoad(true);
+    const getImages = async params => {
+      try {
+        setIsLoading(true);
+        const { hits, totalHits } = await fetchImages(params);
+        setImages(prev => [...prev, ...hits]);
+        setTotal(totalHits);
+        if (firstLoad || (query && page === 1)) {
+          toast.success(`We found ${totalHits} images`);
+        }
+      } catch (err) {
+        setError(err.message);
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
+        setFirstLoad(false);
+      }
+    };
+
     if (query) {
       getImages({ perPage, page, q: query });
     } else {
-      getImages({ perPage, page });
+      getImages({ per_page: perPage, page });
     }
-  }, [perPage, page, query]);
+  }, [error, perPage, page, query, firstLoad]);
 
-  const getImages = async params => {
-    try {
-      setIsLoading(true);
-      const { hits, totalHits } = await fetchImages(params);
-      setImages(prev => [...prev, ...hits]);
-      setTotal(totalHits);
-      if (firstLoad || (query && page === 1)) {
-        toast.success(`We found ${totalHits} images`);
-      }
-    } catch (err) {
-      setError(err.message);
-      toast.error(error.message);
-    } finally {
-      setFirstLoad(false);
-      setIsLoading(false);
-    }
-  };
+  // const getImages = useCallback(
+  //   async params => {
+  //     try {
+  //       setIsLoading(true);
+  //       const { hits, totalHits } = await fetchImages(params);
+  //       setImages(prev => [...prev, ...hits]);
+  //       setTotal(totalHits);
+  //       if (firstLoad || (query && page === 1)) {
+  //         toast.success(`We found ${totalHits} images`);
+  //       }
+  //     } catch (err) {
+  //       setError(err.message);
+  //       toast.error(error.message);
+  //     } finally {
+  //       setFirstLoad(false);
+  //       setIsLoading(false);
+  //     }
+  //   },
+  //   [error, firstLoad, page, query]
+  // );
+
+  // useEffect(() => {
+  //   setFirstLoad(true);
+  //   if (query) {
+  //     getImages({ perPage, page, q: query });
+  //   }
+  //   getImages({ perPage, page });
+  // }, [getImages, perPage, page, query]);
 
   // async componentDidUpdate(prevProps, prevState) {
   //   const { per_page, page, q } = this.state;
