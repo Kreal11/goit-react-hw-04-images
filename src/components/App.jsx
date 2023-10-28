@@ -24,7 +24,6 @@ const App = () => {
   //   const { per_page, page } = this.state;
   //   this.getImages({ per_page, page });
   // }
-
   useEffect(() => {
     setFirstLoad(true);
     if (query) {
@@ -45,7 +44,7 @@ const App = () => {
       }
     } catch (err) {
       setError(err.message);
-      toast.error(`${error}`);
+      toast.error(error.message);
     } finally {
       setFirstLoad(false);
       setIsLoading(false);
