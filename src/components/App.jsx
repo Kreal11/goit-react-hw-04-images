@@ -15,7 +15,7 @@ const App = () => {
   const [error, setError] = useState(null);
   const [total, setTotal] = useState(null);
   const [images, setImages] = useState([]);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage] = useState(12);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
 
@@ -24,6 +24,15 @@ const App = () => {
   //   const { per_page, page } = this.state;
   //   this.getImages({ per_page, page });
   // }
+
+  useEffect(() => {
+    setFirstLoad(true);
+    if (query) {
+      getImages({ perPage, page, q: query });
+    } else {
+      getImages({ perPage, page });
+    }
+  }, [perPage, page, query]);
 
   const getImages = async params => {
     try {
@@ -34,22 +43,14 @@ const App = () => {
       if (firstLoad || (query && page === 1)) {
         toast.success(`We found ${totalHits} images`);
       }
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
+      toast.error(`${error}`);
     } finally {
       setFirstLoad(false);
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    setFirstLoad(true);
-    if (query) {
-      getImages({ perPage, page, query });
-    } else {
-      getImages({ perPage, page });
-    }
-  }, [perPage, page, query]);
 
   // async componentDidUpdate(prevProps, prevState) {
   //   const { per_page, page, q } = this.state;
