@@ -5,15 +5,15 @@ export const Searchbar = ({ loading, query, setSearch }) => {
   // state = {
   //   searchStr: '',
   // };
-  const [searchStr, setSeacrStr] = useState('');
+  const [searchStr, setSearchStr] = useState('');
 
   const handleOnSubmit = e => {
     e.preventDefault();
-    if (!searchStr) {
+    if (!searchStr.trim()) {
       return;
     }
     setSearch(searchStr);
-    setSeacrStr('');
+    setSearchStr('');
     // if (!this.state.searchStr) {
     //   return;
     // }
@@ -22,7 +22,7 @@ export const Searchbar = ({ loading, query, setSearch }) => {
   };
 
   const handleOnChangeInput = e => {
-    setSeacrStr(e.target.value);
+    setSearchStr(e.target.value);
   };
 
   return (
