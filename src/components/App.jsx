@@ -19,12 +19,6 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
 
-  // async componentDidMount() {
-  //   this.state.first_load = true;
-  //   const { per_page, page } = this.state;
-  //   this.getImages({ per_page, page });
-  // }
-
   useEffect(() => {
     const getImages = async params => {
       try {
@@ -51,64 +45,18 @@ const App = () => {
     }
   }, [error, perPage, page, query, firstLoad]);
 
-  // const getImages = useCallback(
-  //   async params => {
-  //     try {
-  //       setIsLoading(true);
-  //       const { hits, totalHits } = await fetchImages(params);
-  //       setImages(prev => [...prev, ...hits]);
-  //       setTotal(totalHits);
-  //       if (firstLoad || (query && page === 1)) {
-  //         toast.success(`We found ${totalHits} images`);
-  //       }
-  //     } catch (err) {
-  //       setError(err.message);
-  //       toast.error(error.message);
-  //     } finally {
-  //       setFirstLoad(false);
-  //       setIsLoading(false);
-  //     }
-  //   },
-  //   [error, firstLoad, page, query]
-  // );
-
-  // useEffect(() => {
-  //   setFirstLoad(true);
-  //   if (query) {
-  //     getImages({ perPage, page, q: query });
-  //   }
-  //   getImages({ perPage, page });
-  // }, [getImages, perPage, page, query]);
-
-  // async componentDidUpdate(prevProps, prevState) {
-  //   const { per_page, page, q } = this.state;
-  //   if (q !== prevState.q || page !== prevState.page) {
-  //     this.getImages({ per_page, page, q });
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (!query === false || !page = false) {
-  //     setImages(query, page, perPage);
-  //   }
-  // }, [query, page, perPage]);
-
   const handleOnLoadMore = () => {
-    // this.setState({ loading: true });
-    // this.setState(prev => ({ page: prev.page + 1 }));
     setIsLoading(true);
     setPage(prev => prev + 1);
   };
 
   const handleSetSearch = query => {
-    // this.setState({ q, images: [], page: 1 });
     setQuery(query);
     setImages([]);
     setPage(1);
   };
 
   const handleToggleModal = largeImageURL => {
-    // this.setState(prev => ({ isOpen: !prev.isOpen, dataModal: largeImageURL }));
     setIsOpen(prev => !prev);
     setDataModal(largeImageURL);
   };

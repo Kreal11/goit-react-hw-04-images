@@ -20,16 +20,6 @@ export const Modal = ({ close, children }) => {
     };
   }, [close]);
 
-  // componentDidMount() {
-  //   document.addEventListener('keydown', this.handleKeyDown);
-  //   document.body.style.overflow = 'hidden';
-  // }
-
-  // componentWillUnmount() {
-  //   document.body.style.overflow = 'visible';
-  //   document.removeEventListener('keydown', this.handleKeyDown);
-  // }
-
   const handleClickOut = ({ target, currentTarget }) => {
     if (target === currentTarget) {
       close();

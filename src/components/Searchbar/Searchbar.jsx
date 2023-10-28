@@ -2,9 +2,6 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 export const Searchbar = ({ loading, query, setSearch }) => {
-  // state = {
-  //   searchStr: '',
-  // };
   const [searchStr, setSearchStr] = useState('');
 
   const handleOnSubmit = e => {
@@ -14,11 +11,6 @@ export const Searchbar = ({ loading, query, setSearch }) => {
     }
     setSearch(searchStr);
     setSearchStr('');
-    // if (!this.state.searchStr) {
-    //   return;
-    // }
-    // this.props.setSearch(this.state.searchStr);
-    // this.setState({ searchStr: '' });
   };
 
   const handleOnChangeInput = e => {
