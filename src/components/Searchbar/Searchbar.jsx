@@ -1,3 +1,4 @@
+import { StyledSearchForm, StyledSearchInput } from './Searchbar.styled';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
@@ -19,7 +20,7 @@ export const Searchbar = ({ loading, query, setSearch }) => {
 
   return (
     <header>
-      <form onSubmit={handleOnSubmit}>
+      <StyledSearchForm onSubmit={handleOnSubmit}>
         <button
           type="submit"
           disabled={
@@ -31,13 +32,13 @@ export const Searchbar = ({ loading, query, setSearch }) => {
           <span>Search</span>
         </button>
 
-        <input
+        <StyledSearchInput
           onChange={handleOnChangeInput}
           type="search"
           placeholder="Search images and photos"
           disabled={loading}
         />
-      </form>
+      </StyledSearchForm>
     </header>
   );
 };
