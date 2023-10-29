@@ -13,18 +13,21 @@ export const StyledWrapperOverlay = styled.div`
 `;
 
 export const StyledWrapperModal = styled.div`
-  max-width: 900px;
-  max-height: 700px;
+  width: 700px;
+  height: 475px;
   position: relative;
   background-color: white;
+  display: flex;
+  justify-content: center;
   padding: 20px;
   overflow: hidden;
   max-width: 1000px;
   border-radius: 5px;
   img {
+    display: block;
     width: 100%;
-    max-height: 500px;
-    object-fit: contain;
+    height: auto;
+    object-fit: cover;
   }
   button {
     color: black;
