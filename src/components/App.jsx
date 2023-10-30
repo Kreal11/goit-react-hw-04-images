@@ -20,7 +20,13 @@ const App = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+  useEffect(() => {
     const getImages = async params => {
+      setError(null);
       try {
         setIsLoading(true);
         const { hits, totalHits } = await fetchImages(params);
@@ -33,7 +39,6 @@ const App = () => {
         }
       } catch (err) {
         setError(err.message);
-        toast.error(error.message);
       } finally {
         setIsLoading(false);
         setFirstLoad(false);
@@ -45,7 +50,7 @@ const App = () => {
     } else {
       getImages({ per_page: perPage, page });
     }
-  }, [error, perPage, page, query, firstLoad]);
+  }, [perPage, page, query, firstLoad]);
 
   const handleOnLoadMore = () => {
     setIsLoading(true);
