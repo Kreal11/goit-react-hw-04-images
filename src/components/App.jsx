@@ -26,7 +26,9 @@ const App = () => {
         const { hits, totalHits } = await fetchImages(params);
         setImages(prev => [...prev, ...hits]);
         setTotal(totalHits);
-        if (firstLoad || (query && page === 1)) {
+        if (hits.length === 0 && page === 1) {
+          toast.warning('There are no images by this search point word');
+        } else if (page === 1) {
           toast.success(`We found ${totalHits} images`);
         }
       } catch (err) {
